@@ -5,6 +5,7 @@ import 'package:dartz/dartz.dart';
 
 abstract class PostsRepository {
   Future<Either<Failure, List<PostEntity>>> getPosts();
+  Future<Either<Failure, List<PostEntity>>> getCachedPosts();
   Future<Either<Failure, Unit>> addPost(PostEntity post);
   Future<Either<Failure, Unit>> deletePost(int id);
   Future<Either<Failure, Unit>> updatePost(PostEntity post);

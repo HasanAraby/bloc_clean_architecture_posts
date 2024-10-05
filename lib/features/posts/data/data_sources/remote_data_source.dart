@@ -9,7 +9,7 @@ class RemoteDataSource {
   RemoteDataSource({required this.api});
 
   Future<List<PostModel>> getPosts() async {
-    final response = await api.get('{$EndPoints.posts}');
+    final response = await api.get('${EndPoints.posts}');
 
     final ret =
         response.map<PostModel>((item) => PostModel.fromJson(item)).toList();
@@ -17,18 +17,19 @@ class RemoteDataSource {
   }
 
   Future<Unit> addPost(PostModel post) async {
-    await api.post('{$EndPoints.posts}', data: post, isFormData: true);
+    await api.post('${EndPoints.posts}', data: post, isFormData: false);
     return Future.value(unit);
   }
 
   Future<Unit> deletePost(int id) async {
-    await api.delete('{$EndPoints.posts}/{$id.tostring()}');
+    String rqm = id.toString();
+    await api.delete('${EndPoints.posts}/${rqm}');
     return Future.value(unit);
   }
 
   Future<Unit> updatePost(PostModel post) async {
-    await api.patch('{$EndPoints.posts}/{$id.tostring()}',
-        data: post, isFormData: true);
+    String rqm = post.id.toString();
+    await api.patch('${EndPoints.posts}/${rqm}', data: post, isFormData: false);
     return Future.value(unit);
   }
 }

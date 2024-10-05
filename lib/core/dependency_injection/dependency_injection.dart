@@ -1,5 +1,9 @@
 import 'package:bloc_clean_architecture_posts/core/api/api_consumer.dart';
+import 'package:bloc_clean_architecture_posts/core/api/api_interceptor.dart';
 import 'package:bloc_clean_architecture_posts/core/api/dio_consumer.dart';
+import 'package:bloc_clean_architecture_posts/core/constants/api_keys.dart';
+import 'package:bloc_clean_architecture_posts/core/constants/end_points.dart';
+import 'package:bloc_clean_architecture_posts/core/constants/strings.dart';
 import 'package:bloc_clean_architecture_posts/core/network/network_info.dart';
 import 'package:bloc_clean_architecture_posts/features/posts/data/data_sources/local_data_source.dart';
 import 'package:bloc_clean_architecture_posts/features/posts/data/data_sources/remote_data_source.dart';
@@ -7,6 +11,7 @@ import 'package:bloc_clean_architecture_posts/features/posts/data/repositories/p
 import 'package:bloc_clean_architecture_posts/features/posts/domain/repositories/posts_repository.dart';
 import 'package:bloc_clean_architecture_posts/features/posts/domain/use_cases/add_post_use_case.dart';
 import 'package:bloc_clean_architecture_posts/features/posts/domain/use_cases/delete_post_use_case.dart';
+import 'package:bloc_clean_architecture_posts/features/posts/domain/use_cases/get_cached_post_use_case.dart';
 import 'package:bloc_clean_architecture_posts/features/posts/domain/use_cases/get_posts_use_case.dart';
 import 'package:bloc_clean_architecture_posts/features/posts/domain/use_cases/update_post_use_case.dart';
 import 'package:bloc_clean_architecture_posts/features/posts/presentation/bloc/posts/posts_bloc.dart';
@@ -21,24 +26,28 @@ Future<void> init() async {
 // features => posts
 
 // bloc
-  sl.registerFactory(() => PostsBloc(
-      addPostUseCase: sl(),
-      deletePostUseCase: sl(),
-      getPostsUseCase: sl(),
-      updatePostUseCase: sl()));
+  sl.registerFactory(
+    () => PostsBloc(
+        addPostUseCase: sl(),
+        deletePostUseCase: sl(),
+        getPostsUseCase: sl(),
+        updatePostUseCase: sl(),
+        getCachedPostUseCase: sl()),
+  );
 
 // usecases
   sl.registerLazySingleton(() => GetPostsUseCase(repository: sl()));
   sl.registerLazySingleton(() => AddPostUseCase(repository: sl()));
   sl.registerLazySingleton(() => UpdatePostUseCase(repository: sl()));
   sl.registerLazySingleton(() => DeletePostUseCase(repository: sl()));
+  sl.registerLazySingleton(() => GetCachedPostUseCase(repository: sl()));
 
 // repositoties
   sl.registerLazySingleton<PostsRepository>(() => PostsRepositoryImp(
-      remoteDataSource: sl(),
-      localDataSource: sl(),
-      networkInfo: sl(),
-      api: sl()));
+        remoteDataSource: sl(),
+        localDataSource: sl(),
+        networkInfo: sl(),
+      ));
 
 // datasource
   sl.registerLazySingleton(() => RemoteDataSource(api: sl()));
@@ -54,4 +63,8 @@ Future<void> init() async {
   sl.registerLazySingleton(() => Dio());
   sl.registerLazySingleton(() => InternetConnectionChecker());
   sl.registerLazySingleton<ApiConsumer>(() => DioConsumer(dio: sl()));
+  // sl.registerLazySingleton(() => ApiInterceptor());
+  sl.registerLazySingleton(() => ApiKeys());
+  sl.registerLazySingleton(() => EndPoints());
+  sl.registerLazySingleton(() => Strings());
 }

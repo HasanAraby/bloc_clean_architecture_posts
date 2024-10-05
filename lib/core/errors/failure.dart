@@ -4,10 +4,12 @@ class Failure {
   Failure({required this.errMessage});
 }
 
-class ServerException extends Failure {
-  ServerException({required super.errMessage});
+class ServerException implements Exception {
+  final String errMessage;
+  ServerException({required this.errMessage});
 }
 
-class CacheException extends Failure {
-  CacheException({required super.errMessage});
+class CacheException implements Exception {
+  final String errMessage;
+  CacheException({required this.errMessage});
 }

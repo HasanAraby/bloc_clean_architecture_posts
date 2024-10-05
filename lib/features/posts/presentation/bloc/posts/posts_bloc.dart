@@ -1,5 +1,7 @@
+import 'package:bloc_clean_architecture_posts/core/constants/strings.dart';
 import 'package:bloc_clean_architecture_posts/features/posts/domain/use_cases/delete_post_use_case.dart';
 import 'package:bloc_clean_architecture_posts/features/posts/domain/use_cases/add_post_use_case.dart';
+import 'package:bloc_clean_architecture_posts/features/posts/domain/use_cases/get_cached_post_use_case.dart';
 import 'package:bloc_clean_architecture_posts/features/posts/domain/use_cases/get_posts_use_case.dart';
 import 'package:bloc_clean_architecture_posts/features/posts/domain/use_cases/update_post_use_case.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,8 +16,10 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
   final AddPostUseCase addPostUseCase;
   final UpdatePostUseCase updatePostUseCase;
   final DeletePostUseCase deletePostUseCase;
+  final GetCachedPostUseCase getCachedPostUseCase;
   PostsBloc(
-      {required this.getPostsUseCase,
+      {required this.getCachedPostUseCase,
+      required this.getPostsUseCase,
       required this.addPostUseCase,
       required this.updatePostUseCase,
       required this.deletePostUseCase})
@@ -38,12 +42,12 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
         final failOrDone = await addPostUseCase(event.post);
         failOrDone.fold(
           (failure) {
-            emit(
-                const ErrorAddDeleteUpdateState(message: 'failed to add Post'));
+            emit(ErrorAddDeleteUpdateState(
+                message: Strings.errorPostAddMessage));
           },
           (unit) {
-            emit(const SuccessAddDeleteUpdateState(
-                message: 'added successfully!'));
+            emit(
+                SuccessAddDeleteUpdateState(message: Strings.postAddedMessage));
           },
         );
       } else if (event is UpdatePostEvent) {
@@ -51,12 +55,12 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
         final failOrDone = await updatePostUseCase(event.post);
         failOrDone.fold(
           (failure) {
-            emit(const ErrorAddDeleteUpdateState(
-                message: 'failed to update Post'));
+            emit(ErrorAddDeleteUpdateState(
+                message: Strings.errorPostUpdateMessage));
           },
           (unit) {
-            emit(const SuccessAddDeleteUpdateState(
-                message: 'updated successfully!'));
+            emit(SuccessAddDeleteUpdateState(
+                message: Strings.postUpdatedMessage));
           },
         );
       } else if (event is DeletePostEvent) {
@@ -64,12 +68,23 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
         final failOrDone = await deletePostUseCase(event.id);
         failOrDone.fold(
           (failure) {
-            emit(const ErrorAddDeleteUpdateState(
-                message: 'failed to delete Post'));
+            emit(ErrorAddDeleteUpdateState(
+                message: Strings.errorPostDeleteMessage));
           },
           (unit) {
-            emit(const SuccessAddDeleteUpdateState(
-                message: 'deleted successfully!'));
+            emit(SuccessAddDeleteUpdateState(
+                message: Strings.postDeletedMessage));
+          },
+        );
+      } else if (event is GetCachedPostsEvent) {
+        emit(LoadingState());
+        final failOrDone = await getCachedPostUseCase();
+        failOrDone.fold(
+          (failure) {
+            emit(ErrotGetCachedPostsState());
+          },
+          (posts) {
+            emit(LoadedCachedPostsState(posts: posts));
           },
         );
       }

@@ -28,7 +28,7 @@ class DioConsumer extends ApiConsumer {
       final response =
           await dio.get(path, data: data, queryParameters: queryParameters);
       return response.data;
-    } on ServerException {
+    } catch (e) {
       throw ServerException(errMessage: Strings.serverExcMessage);
     }
   }
@@ -43,7 +43,8 @@ class DioConsumer extends ApiConsumer {
           data: isFormData ? FormData.fromMap(data) : data,
           queryParameters: queryParameters);
       return response.data;
-    } on ServerException {
+    } catch (e) {
+      print('wrong is here');
       throw ServerException(errMessage: Strings.serverExcMessage);
     }
   }
@@ -54,11 +55,11 @@ class DioConsumer extends ApiConsumer {
       Map<String, dynamic>? queryParameters,
       bool isFormData = false}) async {
     try {
-      final response = await dio.patch(path,
+      final response = await dio.put(path,
           data: isFormData ? FormData.fromMap(data) : data,
           queryParameters: queryParameters);
       return response.data;
-    } on ServerException {
+    } catch (e) {
       throw ServerException(errMessage: Strings.serverExcMessage);
     }
   }
@@ -73,7 +74,7 @@ class DioConsumer extends ApiConsumer {
           data: isFormData ? FormData.fromMap(data) : data,
           queryParameters: queryParameters);
       return response.data;
-    } on ServerException {
+    } catch (e) {
       throw ServerException(errMessage: Strings.serverExcMessage);
     }
   }

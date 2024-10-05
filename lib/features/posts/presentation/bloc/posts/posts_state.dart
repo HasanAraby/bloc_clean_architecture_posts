@@ -19,7 +19,17 @@ class LoadedPostsState extends PostsState {
   List<Object> get props => [posts];
 }
 
+class LoadedCachedPostsState extends PostsState {
+  final List<PostEntity> posts;
+
+  const LoadedCachedPostsState({required this.posts});
+  @override
+  List<Object> get props => [posts];
+}
+
 class ErrotGetPostsState extends PostsState {}
+
+class ErrotGetCachedPostsState extends PostsState {}
 
 class SuccessAddDeleteUpdateState extends PostsState {
   final String message;

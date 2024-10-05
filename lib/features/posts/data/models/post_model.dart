@@ -2,11 +2,11 @@ import 'package:bloc_clean_architecture_posts/core/constants/api_keys.dart';
 import 'package:bloc_clean_architecture_posts/features/posts/domain/entities/post_entity.dart';
 
 class PostModel extends PostEntity {
-  final String userId;
+  final int userId;
 
   PostModel(
       {required this.userId,
-      required super.id,
+      super.id,
       required super.title,
       required super.body});
 

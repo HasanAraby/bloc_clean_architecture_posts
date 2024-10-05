@@ -12,6 +12,11 @@ class GetPostsEvent extends PostsEvent {
   List<Object> get props => [];
 }
 
+class GetCachedPostsEvent extends PostsEvent {
+  @override
+  List<Object> get props => [];
+}
+
 class AddPostEvent extends PostsEvent {
   final PostEntity post;
 
