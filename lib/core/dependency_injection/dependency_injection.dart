@@ -14,6 +14,7 @@ import 'package:bloc_clean_architecture_posts/features/posts/domain/use_cases/de
 import 'package:bloc_clean_architecture_posts/features/posts/domain/use_cases/get_cached_post_use_case.dart';
 import 'package:bloc_clean_architecture_posts/features/posts/domain/use_cases/get_posts_use_case.dart';
 import 'package:bloc_clean_architecture_posts/features/posts/domain/use_cases/update_post_use_case.dart';
+import 'package:bloc_clean_architecture_posts/features/posts/presentation/bloc/add_delete_edit_post/cud_post_bloc.dart';
 import 'package:bloc_clean_architecture_posts/features/posts/presentation/bloc/posts/posts_bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
@@ -27,13 +28,13 @@ Future<void> init() async {
 
 // bloc
   sl.registerFactory(
-    () => PostsBloc(
+    () => PostsBloc(getPostsUseCase: sl(), getCachedPostUseCase: sl()),
+  );
+  sl.registerFactory(() => CudPostBloc(
         addPostUseCase: sl(),
         deletePostUseCase: sl(),
-        getPostsUseCase: sl(),
         updatePostUseCase: sl(),
-        getCachedPostUseCase: sl()),
-  );
+      ));
 
 // usecases
   sl.registerLazySingleton(() => GetPostsUseCase(repository: sl()));

@@ -2,7 +2,7 @@ import 'package:bloc_clean_architecture_posts/core/functions/snack_bar.dart';
 import 'package:bloc_clean_architecture_posts/core/functions/valid_input.dart';
 import 'package:bloc_clean_architecture_posts/core/routes/routing_extension.dart';
 import 'package:bloc_clean_architecture_posts/features/posts/domain/entities/post_entity.dart';
-import 'package:bloc_clean_architecture_posts/features/posts/presentation/bloc/posts/posts_bloc.dart';
+import 'package:bloc_clean_architecture_posts/features/posts/presentation/bloc/add_delete_edit_post/cud_post_bloc.dart';
 import 'package:bloc_clean_architecture_posts/features/posts/presentation/widgets/custom_button.dart';
 import 'package:bloc_clean_architecture_posts/features/posts/presentation/widgets/custom_loading.dart';
 import 'package:bloc_clean_architecture_posts/features/posts/presentation/widgets/post_form_field.dart';
@@ -49,10 +49,9 @@ class _AddPostState extends State<UpdateDeletePost> {
   }
 
   Widget _body() {
-    return BlocConsumer<PostsBloc, PostsState>(
+    return BlocConsumer<CudPostBloc, CudPostState>(
       listener: (context, state) {
         if (state is SuccessAddDeleteUpdateState) {
-          BlocProvider.of<PostsBloc>(context).add(GetPostsEvent());
           context.pop();
           context.snack(state.message, false);
         } else if (state is ErrorAddDeleteUpdateState) {
@@ -96,7 +95,7 @@ class _AddPostState extends State<UpdateDeletePost> {
                     CustomButton(
                         onPress: () {
                           if (formKey.currentState!.validate()) {
-                            BlocProvider.of<PostsBloc>(context).add(
+                            BlocProvider.of<CudPostBloc>(context).add(
                                 UpdatePostEvent(
                                     post: PostEntity(
                                         id: widget.post.id,
@@ -109,7 +108,7 @@ class _AddPostState extends State<UpdateDeletePost> {
                     CustomButton(
                         onPress: () {
                           if (formKey.currentState!.validate()) {
-                            BlocProvider.of<PostsBloc>(context)
+                            BlocProvider.of<CudPostBloc>(context)
                                 .add(DeletePostEvent(id: widget.post.id!));
                           }
                         },

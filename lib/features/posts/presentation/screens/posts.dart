@@ -22,29 +22,28 @@ class Posts extends StatelessWidget {
         },
         child: const Icon(Icons.add),
       ),
-      body: BlocBuilder<PostsBloc, PostsState>(builder: (context, state) {
-        if (state is LoadingState) {
-          return const CustomLoading();
-        } else if (state is LoadedPostsState) {
-          return RefreshIndicator(
-            onRefresh: () async {
+      body: RefreshIndicator(
+        onRefresh: () async {
+          BlocListener<PostsBloc, PostsState>(
+            listener: (context, state) {
+              if (state is LoadingState) return;
               BlocProvider.of<PostsBloc>(context).add(GetPostsEvent());
             },
-            child: CustomList(list: state.posts),
           );
-        } else {
-          BlocProvider.of<PostsBloc>(context).add(GetCachedPostsEvent());
+        },
+        child: BlocBuilder<PostsBloc, PostsState>(builder: (context, state) {
           if (state is LoadingState) {
             return const CustomLoading();
-          } else if (state is LoadedCachedPostsState) {
+          } else if (state is LoadedPostsState) {
             return CustomList(list: state.posts);
+          } else {
+            // ErrotGetPostsState
+            return const Center(
+              child: Text('No data, try to connect to internet.'),
+            );
           }
-
-          return const Center(
-            child: Text('No Data'),
-          );
-        }
-      }),
+        }),
+      ),
     );
   }
 }

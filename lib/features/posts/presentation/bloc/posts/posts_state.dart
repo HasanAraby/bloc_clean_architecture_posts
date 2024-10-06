@@ -30,19 +30,3 @@ class LoadedCachedPostsState extends PostsState {
 class ErrotGetPostsState extends PostsState {}
 
 class ErrotGetCachedPostsState extends PostsState {}
-
-class SuccessAddDeleteUpdateState extends PostsState {
-  final String message;
-
-  const SuccessAddDeleteUpdateState({required this.message});
-  @override
-  List<Object> get props => [message];
-}
-
-class ErrorAddDeleteUpdateState extends PostsState {
-  final String message;
-
-  const ErrorAddDeleteUpdateState({required this.message});
-  @override
-  List<Object> get props => [message];
-}

@@ -13,17 +13,12 @@ part 'posts_state.dart';
 
 class PostsBloc extends Bloc<PostsEvent, PostsState> {
   final GetPostsUseCase getPostsUseCase;
-  final AddPostUseCase addPostUseCase;
-  final UpdatePostUseCase updatePostUseCase;
-  final DeletePostUseCase deletePostUseCase;
+
   final GetCachedPostUseCase getCachedPostUseCase;
-  PostsBloc(
-      {required this.getCachedPostUseCase,
-      required this.getPostsUseCase,
-      required this.addPostUseCase,
-      required this.updatePostUseCase,
-      required this.deletePostUseCase})
-      : super(PostsInitial()) {
+  PostsBloc({
+    required this.getCachedPostUseCase,
+    required this.getPostsUseCase,
+  }) : super(PostsInitial()) {
     on<PostsEvent>((event, emit) async {
       if (event is GetPostsEvent) {
         emit(LoadingState());
@@ -34,46 +29,6 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
           },
           (posts) {
             emit(LoadedPostsState(posts: posts));
-          },
-        );
-      } else if (event is AddPostEvent) {
-        emit(LoadingState());
-
-        final failOrDone = await addPostUseCase(event.post);
-        failOrDone.fold(
-          (failure) {
-            emit(ErrorAddDeleteUpdateState(
-                message: Strings.errorPostAddMessage));
-          },
-          (unit) {
-            emit(
-                SuccessAddDeleteUpdateState(message: Strings.postAddedMessage));
-          },
-        );
-      } else if (event is UpdatePostEvent) {
-        emit(LoadingState());
-        final failOrDone = await updatePostUseCase(event.post);
-        failOrDone.fold(
-          (failure) {
-            emit(ErrorAddDeleteUpdateState(
-                message: Strings.errorPostUpdateMessage));
-          },
-          (unit) {
-            emit(SuccessAddDeleteUpdateState(
-                message: Strings.postUpdatedMessage));
-          },
-        );
-      } else if (event is DeletePostEvent) {
-        emit(LoadingState());
-        final failOrDone = await deletePostUseCase(event.id);
-        failOrDone.fold(
-          (failure) {
-            emit(ErrorAddDeleteUpdateState(
-                message: Strings.errorPostDeleteMessage));
-          },
-          (unit) {
-            emit(SuccessAddDeleteUpdateState(
-                message: Strings.postDeletedMessage));
           },
         );
       } else if (event is GetCachedPostsEvent) {
