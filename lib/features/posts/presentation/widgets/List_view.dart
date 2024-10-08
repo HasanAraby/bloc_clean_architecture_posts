@@ -8,18 +8,21 @@ class CustomList extends StatelessWidget {
   final List<PostEntity> list;
   final ScrollController controller;
   final bool reachMax;
+  final bool? stopLoading;
   const CustomList(
       {super.key,
       required this.list,
       required this.controller,
-      required this.reachMax});
+      required this.reachMax,
+      this.stopLoading});
 
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
       controller: controller,
-      itemCount: reachMax ? 0 : 1 + list.length,
-      itemBuilder: (c, idx) {
+      itemCount:
+          stopLoading == true ? list.length : list.length + (reachMax ? 0 : 1),
+      itemBuilder: (context, idx) {
         return InkWell(
           onTap: () {
             context.push(UpdateDeletePost(

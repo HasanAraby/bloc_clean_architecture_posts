@@ -27,6 +27,10 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
           emit(state.copyWith(
               postStatus: PostStatus.success, HasReachedMax: true));
         }
+        // if it is the first time show loading
+        if (state.posts.isEmpty) {
+          emit(state.copyWith(postStatus: PostStatus.loading));
+        }
         final failOrPosts = await getPostsUseCase(state.posts.length);
         failOrPosts.fold(
           (failure) {

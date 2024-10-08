@@ -22,6 +22,9 @@ class LocalDataSource {
     final data = sharedPrefs.getString(Strings.postsLocalSource);
     if (data != null) {
       final list = json.decode(data);
+      if (list.isEmpty) {
+        throw CacheException(errMessage: Strings.cacheExcMessage);
+      }
       final ret =
           list.map<PostModel>((item) => PostModel.fromJson(item)).toList();
       return Future.value(ret);

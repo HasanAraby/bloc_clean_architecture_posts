@@ -37,6 +37,7 @@ class _PostsState extends State<Posts> {
       final maxScroll = _scrollController.position.maxScrollExtent;
       final currentScroll = _scrollController.offset;
       if (currentScroll >= maxScroll) {
+        print('getpostsevent');
         BlocProvider.of<PostsBloc>(context).add(GetPostsEvent());
       }
     }
@@ -64,20 +65,20 @@ class _PostsState extends State<Posts> {
       onRefresh: () async {
         BlocListener<PostsBloc, PostsState>(
           listener: (context, state) {
-            if (state.postStatus == PostStatus.errorApi) {
-              context.snack(Strings.cacheExcMessage, true);
-            }
             if (state.postStatus == PostStatus.loading) return;
+            print("getref");
             BlocProvider.of<PostsBloc>(context).add(GetPostsEvent());
           },
         );
       },
-      child: BlocBuilder<PostsBloc, PostsState>(builder: (context, state) {
+      child: BlocConsumer<PostsBloc, PostsState>(listener: (context, state) {
+        if (state.postStatus == PostStatus.errorApi) {
+          context.snack(Strings.serverExcMessage, true);
+        }
+      }, builder: (context, state) {
         if (state.postStatus == PostStatus.loading) {
           return const CustomLoading();
         } else if (state.postStatus == PostStatus.success) {
-          int rqm = state.posts.length;
-          print("========== $rqm");
           return CustomList(
             controller: _scrollController,
             list: state.posts,
@@ -93,6 +94,7 @@ class _PostsState extends State<Posts> {
             controller: _scrollController,
             list: state.posts,
             reachMax: state.hasReachedMax,
+            stopLoading: true,
           );
         } else {
           return const Text('not included state');

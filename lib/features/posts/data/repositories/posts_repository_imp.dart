@@ -26,7 +26,9 @@ class PostsRepositoryImp implements PostsRepository {
     if (await networkInfo.isConnected) {
       try {
         final list = await remoteDataSource.getPosts(st);
-        localDataSource.cachePosts(list);
+        if (list.isNotEmpty) {
+          localDataSource.cachePosts(list);
+        }
         x = false;
         return Right(list);
       } on ServerException catch (e) {
@@ -34,8 +36,9 @@ class PostsRepositoryImp implements PostsRepository {
       }
     } else {
       try {
-        final list = await localDataSource.getCachedPosts();
+        print("xxxx");
         if (x == null) {
+          final list = await localDataSource.getCachedPosts();
           x = false;
           return Right(list);
         }
