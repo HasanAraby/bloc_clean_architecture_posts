@@ -1,16 +1,33 @@
 # bloc_clean_architecture_posts
 
-A new Flutter project.
+this is a posts app:
 
-## Getting Started
+architecture patten: clean architecture.
 
-This project is a starting point for a Flutter application.
+logic:
+  this app uses api links to get, delete , add and edit post.
+     first: check internet connectivity
+             if connected you can :
+                    get posts using pagination then caching those posts.
+                    add post.
+                    delete post.
+                    edit post.
+             if not connected:
+                    you can get posts from cache.
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+  we include all of these processec in error and exception handling system to prevent out app from caching and improve app performance.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+  used design patterns: singleton pattern and factory pattern.
+  used packages: 
+       cupertino_icons: ^1.0.6
+       flutter_bloc:
+       dartz:
+       get_it:
+       equatable:
+       internet_connection_checker:
+       dio:
+       shared_preferences:
+       bloc_concurrency:
+                    
+  if there is no internet connection 
