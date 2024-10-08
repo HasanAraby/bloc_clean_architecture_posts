@@ -30,4 +30,4 @@ logic:
        shared_preferences:
        bloc_concurrency:
                     
-  if there is no internet connection 
+ 
