@@ -63,13 +63,7 @@ class _PostsState extends State<Posts> {
   Widget _body() {
     return RefreshIndicator(
       onRefresh: () async {
-        BlocListener<PostsBloc, PostsState>(
-          listener: (context, state) {
-            if (state.postStatus == PostStatus.loading) return;
-            print("getref");
-            BlocProvider.of<PostsBloc>(context).add(GetPostsEvent());
-          },
-        );
+        BlocProvider.of<PostsBloc>(context).add(GetPostsEvent());
       },
       child: BlocConsumer<PostsBloc, PostsState>(listener: (context, state) {
         if (state.postStatus == PostStatus.errorApi) {

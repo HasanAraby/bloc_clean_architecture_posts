@@ -2,7 +2,7 @@ part of 'posts_bloc.dart';
 
 enum PostStatus { loading, success, errorApi, errorLocal }
 
-class PostsState extends Equatable {
+class PostsState {
   final PostStatus postStatus;
   final List<PostEntity> posts;
   final bool hasReachedMax;
@@ -12,8 +12,8 @@ class PostsState extends Equatable {
     this.hasReachedMax = false,
   });
 
-  @override
-  List<Object> get props => [postStatus, posts, hasReachedMax];
+  // @override
+  // List<Object> get props => [postStatus, posts, hasReachedMax];
 
   PostsState copyWith({
     PostStatus? postStatus,
