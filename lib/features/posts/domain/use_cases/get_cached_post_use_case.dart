@@ -3,6 +3,7 @@ import 'package:bloc_clean_architecture_posts/features/posts/domain/entities/pos
 import 'package:bloc_clean_architecture_posts/features/posts/domain/repositories/posts_repository.dart';
 import 'package:dartz/dartz.dart';
 
+// not used till now
 class GetCachedPostUseCase {
   final PostsRepository repository;
 

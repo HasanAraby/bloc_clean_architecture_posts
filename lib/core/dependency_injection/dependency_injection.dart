@@ -59,7 +59,7 @@ Future<void> init() async {
       () => NetworkInfoImp(internetChecker: sl()));
 //extra
   final sharedPrefs = await SharedPreferences.getInstance();
-  sl.registerLazySingleton(() => sharedPrefs);
+  sl.registerLazySingleton<SharedPreferences>(() => sharedPrefs);
 
   sl.registerLazySingleton(() => Dio());
   sl.registerLazySingleton(() => InternetConnectionChecker());

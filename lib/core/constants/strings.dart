@@ -9,4 +9,5 @@ class Strings {
   static String errorPostAddMessage = 'Failed to add post, try later.';
   static String errorPostUpdateMessage = 'Failed to update post, try later.';
   static String errorPostDeleteMessage = 'Failed to delete post, try later.';
+  static String lastGetWasCache = 'lastGetWasCache';
 }

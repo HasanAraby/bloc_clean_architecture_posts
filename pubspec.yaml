@@ -42,6 +42,7 @@ dependencies:
   internet_connection_checker:
   dio:
   shared_preferences:
+  bloc_concurrency: ^0.2.5
 
 dev_dependencies:
   flutter_test:

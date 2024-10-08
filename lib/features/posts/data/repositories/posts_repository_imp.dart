@@ -1,3 +1,5 @@
+import 'package:bloc_clean_architecture_posts/core/constants/strings.dart';
+import 'package:bloc_clean_architecture_posts/core/dependency_injection/dependency_injection.dart';
 import 'package:bloc_clean_architecture_posts/core/errors/failure.dart';
 import 'package:bloc_clean_architecture_posts/core/network/network_info.dart';
 import 'package:bloc_clean_architecture_posts/features/posts/data/data_sources/local_data_source.dart';
@@ -6,6 +8,7 @@ import 'package:bloc_clean_architecture_posts/features/posts/data/models/post_mo
 import 'package:bloc_clean_architecture_posts/features/posts/domain/entities/post_entity.dart';
 import 'package:bloc_clean_architecture_posts/features/posts/domain/repositories/posts_repository.dart';
 import 'package:dartz/dartz.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PostsRepositoryImp implements PostsRepository {
   final NetworkInfo networkInfo;
@@ -17,12 +20,14 @@ class PostsRepositoryImp implements PostsRepository {
     required this.localDataSource,
     required this.networkInfo,
   });
+  bool? x;
   @override
-  Future<Either<Failure, List<PostModel>>> getPosts() async {
+  Future<Either<Failure, List<PostModel>>> getPosts(int st) async {
     if (await networkInfo.isConnected) {
       try {
-        final list = await remoteDataSource.getPosts();
+        final list = await remoteDataSource.getPosts(st);
         localDataSource.cachePosts(list);
+        x = false;
         return Right(list);
       } on ServerException catch (e) {
         return Left(Failure(errMessage: e.errMessage));
@@ -30,7 +35,12 @@ class PostsRepositoryImp implements PostsRepository {
     } else {
       try {
         final list = await localDataSource.getCachedPosts();
-        return Right(list);
+        if (x == null) {
+          x = false;
+          return Right(list);
+        }
+
+        return Left(Failure(errMessage: Strings.serverExcMessage));
       } on CacheException catch (e) {
         return Left(Failure(errMessage: e.errMessage));
       }

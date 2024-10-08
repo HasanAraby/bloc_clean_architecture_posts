@@ -1,32 +1,29 @@
 part of 'posts_bloc.dart';
 
-sealed class PostsState extends Equatable {
-  const PostsState();
+enum PostStatus { loading, success, errorApi, errorLocal }
 
-  @override
-  List<Object> get props => [];
-}
-
-class PostsInitial extends PostsState {}
-
-class LoadingState extends PostsState {}
-
-class LoadedPostsState extends PostsState {
+class PostsState extends Equatable {
+  final PostStatus postStatus;
   final List<PostEntity> posts;
+  final bool hasReachedMax;
+  const PostsState({
+    this.postStatus = PostStatus.loading,
+    this.posts = const [],
+    this.hasReachedMax = false,
+  });
 
-  const LoadedPostsState({required this.posts});
   @override
-  List<Object> get props => [posts];
+  List<Object> get props => [postStatus, posts, hasReachedMax];
+
+  PostsState copyWith({
+    PostStatus? postStatus,
+    List<PostEntity>? posts,
+    bool? HasReachedMax,
+  }) {
+    return PostsState(
+      hasReachedMax: HasReachedMax ?? this.hasReachedMax,
+      posts: posts ?? this.posts,
+      postStatus: postStatus ?? this.postStatus,
+    );
+  }
 }
-
-class LoadedCachedPostsState extends PostsState {
-  final List<PostEntity> posts;
-
-  const LoadedCachedPostsState({required this.posts});
-  @override
-  List<Object> get props => [posts];
-}
-
-class ErrotGetPostsState extends PostsState {}
-
-class ErrotGetCachedPostsState extends PostsState {}

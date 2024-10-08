@@ -4,7 +4,7 @@ import 'package:bloc_clean_architecture_posts/features/posts/domain/entities/pos
 import 'package:dartz/dartz.dart';
 
 abstract class PostsRepository {
-  Future<Either<Failure, List<PostEntity>>> getPosts();
+  Future<Either<Failure, List<PostEntity>>> getPosts(int st);
   Future<Either<Failure, List<PostEntity>>> getCachedPosts();
   Future<Either<Failure, Unit>> addPost(PostEntity post);
   Future<Either<Failure, Unit>> deletePost(int id);
